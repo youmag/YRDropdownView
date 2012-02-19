@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+extern NSInteger const kTagDropdownView;
+
 @interface YRDropdownView : UIView
 {
     NSString *titleText;

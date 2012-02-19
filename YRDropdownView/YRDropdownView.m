@@ -9,6 +9,9 @@
 #import "YRDropdownView.h"
 #import <QuartzCore/QuartzCore.h>
 
+NSInteger const kTagDropdownView = 3;
+
+
 @interface UILabel (YRDropdownView)
 - (void)sizeToFitFixedWidth:(CGFloat)fixedWidth;
 @end
@@ -268,7 +271,9 @@ static YRDropdownView *currentDropdown = nil;
     [view addSubview:dropdown];
     [dropdown show:animated];
     if (delay != 0.0) {
-        [dropdown performSelector:@selector(hideUsingAnimation:) withObject:[NSNumber numberWithBool:animated] afterDelay:delay+ANIMATION_DURATION];
+        [dropdown performSelector:@selector(hideUsingAnimation:) 
+                       withObject:[NSNumber numberWithBool:animated] 
+                       afterDelay:delay+ANIMATION_DURATION];
     }
 
     return dropdown;
@@ -321,7 +326,10 @@ static YRDropdownView *currentDropdown = nil;
 {
     if(animated)
     {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y-self.frame.size.height, self.frame.size.width, self.frame.size.height);
+        self.frame = CGRectMake(self.frame.origin.x, 
+                                self.frame.origin.y-self.frame.size.height, 
+                                self.frame.size.width, 
+                                self.frame.size.height);
         self.alpha = 0.02f;
         [UIView animateWithDuration:ANIMATION_DURATION
                               delay:0.0
