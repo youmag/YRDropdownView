@@ -60,6 +60,7 @@ static YRDropdownView *currentDropdown = nil;
     return titleText;
 }
 
+#pragma GCC diagnostic ignored "-Wselector"
 - (void)setTitleText:(NSString *)newText
 {
     if ([NSThread isMainThread]) {
@@ -72,6 +73,7 @@ static YRDropdownView *currentDropdown = nil;
 		[self performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:NO];
 	}
 }
+#pragma GCC diagnostic warning "-Wselector"
 
 - (NSString *)detailText
 {
@@ -132,7 +134,9 @@ static YRDropdownView *currentDropdown = nil;
         titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
         detailLabel = [[UILabel alloc] initWithFrame:self.bounds];
         backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-        backgroundImageView.image = [self.backgroundImage stretchableImageWithLeftCapWidth:1 topCapHeight:self.backgroundImage.size.height/2];
+        CGFloat height = self.backgroundImage.size.height/2.0f;
+        backgroundImageView.image = [self.backgroundImage stretchableImageWithLeftCapWidth:1 
+                                                                              topCapHeight:(NSInteger)height];
         backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         accessoryImageView = [[UIImageView alloc] initWithFrame:self.bounds];
@@ -206,8 +210,8 @@ static YRDropdownView *currentDropdown = nil;
                                        detail:detail
                                         image:image 
                               backgroundImage:backgroundImage
-                              titleLabelColor:[UIColor colorWithWhite:0.225 alpha:1.0]
-                             detailLabelColor:[UIColor colorWithWhite:0.225 alpha:1.0]
+                              titleLabelColor:[UIColor colorWithWhite:0.225f alpha:1.0f]
+                             detailLabelColor:[UIColor colorWithWhite:0.225f alpha:1.0f]
                                      animated:animated 
                                     hideAfter:delay];
 }
@@ -318,7 +322,7 @@ static YRDropdownView *currentDropdown = nil;
     if(animated)
     {
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y-self.frame.size.height, self.frame.size.width, self.frame.size.height);
-        self.alpha = 0.02;
+        self.alpha = 0.02f;
         [UIView animateWithDuration:ANIMATION_DURATION
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -349,8 +353,11 @@ static YRDropdownView *currentDropdown = nil;
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             self.alpha = 0.02;
-                             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y-self.frame.size.height, self.frame.size.width, self.frame.size.height);
+                             self.alpha = 0.02f;
+                             self.frame = CGRectMake(self.frame.origin.x, 
+                                                     self.frame.origin.y-self.frame.size.height, 
+                                                     self.frame.size.width, 
+                                                     self.frame.size.height);
                          }
                          completion:^(BOOL finished) {
                              if (finished)
@@ -392,10 +399,10 @@ static YRDropdownView *currentDropdown = nil;
         total += components[i];
     }
     if ((total/((int)CGColorGetNumberOfComponents(color)-1)) > 0.5){
-        titleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
+        titleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25f];
         titleLabel.shadowOffset = CGSizeMake(0, -1/[[UIScreen mainScreen] scale]);
     }else {
-        titleLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.35];
+        titleLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.35f];
         titleLabel.shadowOffset = CGSizeMake(0, 1/[[UIScreen mainScreen] scale]);
     }
 
@@ -417,17 +424,17 @@ static YRDropdownView *currentDropdown = nil;
         detailLabel.backgroundColor = [UIColor clearColor];
         detailLabel.textColor = detailLabelColor;
 
-        CGColorRef color = [detailLabel.textColor CGColor];
-        const CGFloat *components = CGColorGetComponents(color);
-        float total = 0.0;
-        for (int i = 0; i < (int)CGColorGetNumberOfComponents(color)-1; i++){
-            total += components[i];
+        CGColorRef aColor = [detailLabel.textColor CGColor];
+        const CGFloat *aComponents = CGColorGetComponents(aColor);
+        float aTotal = 0.0f;
+        for (int i = 0; i < (int)CGColorGetNumberOfComponents(aColor)-1; i++){
+            aTotal += aComponents[i];
         }
-        if ((total/((int)CGColorGetNumberOfComponents(color)-1)) > 0.5){
+        if ((aTotal/((int)CGColorGetNumberOfComponents(aColor)-1)) > 0.5){
             detailLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
             detailLabel.shadowOffset = CGSizeMake(0, -1/[[UIScreen mainScreen] scale]);
         }else {
-            detailLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.35];
+            detailLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.35f];
             detailLabel.shadowOffset = CGSizeMake(0, 1/[[UIScreen mainScreen] scale]);
         }
 
@@ -483,8 +490,9 @@ static YRDropdownView *currentDropdown = nil;
     }
             
     [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, dropdownHeight)];
-    
-    [backgroundImageView setImage:[backgroundImage stretchableImageWithLeftCapWidth:1 topCapHeight:backgroundImage.size.height/2]];
+    CGFloat height = backgroundImage.size.height/2.0f;
+    [backgroundImageView setImage:[backgroundImage stretchableImageWithLeftCapWidth:1 
+                                                                       topCapHeight:(NSInteger)height]];
     [backgroundImageView setFrame:self.bounds];
         
 }
